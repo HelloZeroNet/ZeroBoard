@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+ <title>ZeroBoard</title>
+ <meta charset="utf-8">
+ <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+ <link rel="stylesheet" href="css/all.css" />
+</head>
+<body>
+
+<h1>ZeroBoard</h1>
+
+<h3 class="description">Demo for dynamic, decentrialized content publishing.</h3>
+<!--<h3 class="description"><a href="#Working">How does it works?</a></h3>-->
+
+<div class="message message-new">
+ <div class="avatar"></div>
+ <div class="body"><input type='text' placeholder='Try it: Add your message!' maxlength="255"></div>
+ <a href='#Submit' class='submit'>Submit message</a>
+</div>
+
+<div class='notification error' id="passive_error">Your FileServer port is not opened! New messages will not appear automatically. <a href='#Reload'>Reload now</a></div>
+
+<h2 style='margin-left: 18px'>Last messages:</h2>
+<div class="messages">
+ <div class="message template">
+  <div class="avatar"></div>
+  <div class="body">Hello 1,2,3,4</div>
+  <div class="added">3 minutes ago</div>
+ </div>
+</div>
+
+<script type="text/javascript" src="js/all.js" asyc></script>
+</body>
+</html>
