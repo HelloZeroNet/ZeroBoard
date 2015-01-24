@@ -1,6 +1,6 @@
 
 
-/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js\lib/00-jquery.min.js ---- */
+/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/00-jquery.min.js ---- */
 
 
 /*! jQuery v2.1.3 | (c) 2005, 2014 jQuery Foundation, Inc. | jquery.org/license */
@@ -10,7 +10,7 @@
 
 
 
-/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js\lib/ZeroFrame.coffee ---- */
+/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/ZeroFrame.coffee ---- */
 
 
 (function() {
@@ -125,7 +125,7 @@
 
 
 
-/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js\lib/identicon.js ---- */
+/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/identicon.js ---- */
 
 
 /**
@@ -222,7 +222,7 @@
 })();
 
 
-/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js\lib/jquery.csslater.coffee ---- */
+/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/jquery.csslater.coffee ---- */
 
 
 (function() {
@@ -300,7 +300,7 @@
 
 
 
-/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js\lib/pnglib.js ---- */
+/* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/pnglib.js ---- */
 
 
 /**
@@ -535,6 +535,8 @@
     ZeroBoard.prototype.init = function() {
       this.loadMessages();
       this.avatars_added = {};
+      this.avatars_queue = [];
+      this.avatars_thread = null;
       $(".submit").on("click", ((function(_this) {
         return function() {
           return _this.submitMessage();
@@ -557,7 +559,7 @@
       this.cmd("siteInfo", {}, (function(_this) {
         return function(ret) {
           _this.site_info = ret;
-          return _this.setAvatar($(".message-new .avatar"), _this.site_info["auth_id_md5"]);
+          return _this.setAvatar($(".message-new .avatar"), _this.site_info["auth_key_sha512"], "priority");
         };
       })(this));
       return this.cmd("serverInfo", {}, (function(_this) {
@@ -572,14 +574,17 @@
     };
 
     ZeroBoard.prototype.submitMessage = function() {
-      var body;
+      var auth_key, body, hash;
       body = $(".message-new input").val();
       if (body) {
         $(".message-new").addClass("submitting");
         $(".message-new input").attr("disabled", "disabled");
+        hash = "sha512";
+        auth_key = this.site_info["auth_key"];
         return $.post("http://demo.zeronet.io/ZeroBoard/add.php", {
           "body": body,
-          "auth_id": this.site_info["auth_id"]
+          "auth_key": auth_key,
+          "hash": hash
         }).always(this.submittedMessage);
       } else {
         return $(".message-new input").val("I'm so lazy that I'm using the default message.").select();
@@ -598,28 +603,64 @@
       }
     };
 
-    ZeroBoard.prototype.setAvatar = function(elem, hash) {
-      var imagedata;
-      if (!this.avatars_added[hash]) {
-        imagedata = new Identicon(hash, 70).toString();
-        $("body").append("<style>.identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }</style>");
-        this.avatars_added[hash] = true;
+    ZeroBoard.prototype.setAvatar = function(elem, hash, priority) {
+      if (elem == null) {
+        elem = null;
       }
-      return elem.addClass("identicon-" + hash);
+      if (priority == null) {
+        priority = false;
+      }
+      if (!this.avatars_added[hash]) {
+        this.avatars_added[hash] = true;
+        if (priority) {
+          this.avatars_queue.unshift(hash);
+        } else {
+          this.avatars_queue.push(hash);
+        }
+      }
+      if (elem) {
+        return elem.addClass("identicon-" + hash);
+      }
+    };
+
+    ZeroBoard.prototype.loadAvatars = function() {
+      if (this.avatar_thread) {
+        return;
+      }
+      return this.avatar_thread = setInterval(((function(_this) {
+        return function() {
+          var hash, i, imagedata, _i, _results;
+          _results = [];
+          for (i = _i = 1; _i <= 5; i = ++_i) {
+            hash = _this.avatars_queue.shift();
+            if (hash) {
+              imagedata = new Identicon(hash, 70).toString();
+              _results.push($("body").append("<style>.identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }</style>"));
+            } else {
+              clearInterval(_this.avatar_thread);
+              _this.avatar_thread = null;
+              break;
+            }
+          }
+          return _results;
+        };
+      })(this)), 20);
     };
 
     ZeroBoard.prototype.loadMessages = function() {
       return $.getJSON("messages.json", (function(_this) {
         return function(messages) {
-          var elem, empty, height, key, message, _i, _len, _ref;
+          var elem, empty, height, key, message, s, template, _i, _j, _len, _len1, _ref, _ref1;
           empty = $(".messages .message:not(.template").length === 0;
+          s = +(new Date);
           _this.log("Loading messages, empty:", empty);
+          template = $(".message.template");
           _ref = messages.reverse();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];
             key = message.sender + "-" + message.added;
-            if ($(".message-" + key).length === 0) {
-              elem = $(".message.template").clone().removeClass("template").addClass("message-" + key);
+            if (empty || $(".message-" + key).length === 0) {
+              elem = template.clone().removeClass("template").addClass("message-" + key);
               if (!empty) {
                 elem.css({
                   "opacity": 0,
@@ -627,10 +668,11 @@
                 });
               }
               $(".body", elem).html(message.body);
-              _this.setAvatar($(".avatar", elem), message.sender);
-              elem.prependTo($(".messages"));
+              $(".avatar", elem).addClass("identicon-" + message.sender);
               $(".added", elem).text(_this.formatSince(message.added));
+              elem.prependTo($(".messages"));
               if (!empty) {
+                _this.setAvatar($(".avatar", elem), message.sender);
                 height = elem.outerHeight();
                 elem.css("height", 0).cssLater({
                   "height": height,
@@ -640,6 +682,15 @@
               }
             }
           }
+          _this.log("Loaded messages in", +(new Date) - s);
+          if (empty) {
+            _ref1 = messages.reverse();
+            for (_j = 0, _len1 = _ref1.length; _j < _len1; _j++) {
+              message = _ref1[_j];
+              _this.setAvatar(null, message.sender);
+            }
+          }
+          _this.loadAvatars();
           return $(".messages").css("opacity", "1");
         };
       })(this));

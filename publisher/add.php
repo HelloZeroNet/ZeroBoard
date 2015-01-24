@@ -18,8 +18,10 @@ if (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], $site) 
 
 echo " Parsing parameters...\n";
 // Parse parameters
-$auth_id = $_POST["auth_id"];
-$auth_id_md5 = md5($auth_id);
+
+$auth_key = $_POST["auth_key"];
+$auth_key_hash = substr(hash("sha512", $auth_key), 0, 64);
+
 $body = $_POST["body"];
 $body_safe = htmlentities($body);
 
@@ -32,7 +34,7 @@ if (!$body or !$auth_id) {
 echo " Loading messages.json...\n";
 $messages = json_decode(file_get_contents($messages_json));
 $message = array(
-	"sender" => $auth_id_md5,
+	"sender" => $auth_key_hash,
 	"body" => $body_safe,
 	"added" => time()
 );
