@@ -4,30 +4,36 @@
     "files": {
         "css/all.css": {
             "sha1": "ec2a3248a1bb58b7438dec7ba9b9120594c34cb3", 
+            "sha512": "60a98acb770fc7523ed67fee787a6f9a22794b7e0cb968a7ebff66295ff783b0", 
             "size": 70966
         }, 
         "img/loading.gif": {
             "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
+            "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
             "size": 723
         }, 
         "index.html": {
             "sha1": "d60fa9ee0799aa2c6dee02073cee9e5dffa93e7d", 
+            "sha512": "3e0d035ed30656763932c543d831a7c8efe715230de68c160b767a0cbc312ad1", 
             "size": 1098
         }, 
         "js/all.js": {
-            "sha1": "2f30c0a198781c9b6c85501a9758c85633d88fb2", 
-            "size": 105002
+            "sha1": "6d612b0916ed9d768fdbd52f16e7a56be9b3c2b3", 
+            "sha512": "b5583cf86494f87e70446c904c519a6f51439c999618b01c8b18b96cf13a8a5a", 
+            "size": 106609
         }, 
         "messages.json": {
-            "sha1": "79036f08f3abb1047e0ee801fc43ed648063f5cd", 
-            "size": 26748
+            "sha1": "a46d1a954a7eafdab9befe3b20f1e57726e42a96", 
+            "sha512": "9044ff580dcccd720978d5a731d5cbecb6ad1803cf648e6ab51195457870435c", 
+            "size": 82938
         }
     }, 
-    "ignore": "((js|css)/(?!all.(js|css))|(publisher/.*))", 
-    "modified": 1421341472.559614, 
+    "ignore": "(js|css)/(?!all.(js|css))", 
+    "modified": 1422381516.70414, 
     "sign": [
-        14830475633533923822035968073032337518392339103183238702712370182562567069880, 
-        114604714033415679412123407191275680325704960640349700042013131314760497755995
+        29334100301590594975578327996119202062857405391372164307074405973946687201611, 
+        83070224950515312871193863455231350488624760089762241252689786822232623791194
     ], 
-    "title": "ZeroBoard"
+    "title": "ZeroBoard", 
+    "zeronet_version": "0.1.6"
 }

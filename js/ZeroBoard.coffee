@@ -67,17 +67,20 @@ class ZeroBoard extends ZeroFrame
 	# Load avatars
 	loadAvatars: ->
 		if @avatar_thread then return # Already running
-		@avatar_thread = setInterval (=> # Dont block the UI
-			for i in [1..5]
-				hash = @avatars_queue.shift()
-				if hash
-					imagedata = new Identicon(hash, 70).toString();
-					$("body").append("<style>.identicon-#{hash} { background-image: url(data:image/png;base64,#{imagedata}) }</style>")
-				else
-					clearInterval @avatar_thread
-					@avatar_thread = null
-					break
-		), 20
+		@loadAvatarsWorker()
+		@avatar_thread = setInterval @loadAvatarsWorker, 200
+
+
+	loadAvatarsWorker: =>
+		for i in [1..5]
+			hash = @avatars_queue.shift()
+			if hash
+				imagedata = new Identicon(hash, 70).toString();
+				$("body").append("<style>.identicon-#{hash} { background-image: url(data:image/png;base64,#{imagedata}) }</style>")
+			else
+				clearInterval @avatar_thread
+				@avatar_thread = null
+				break
 
 
 

@@ -519,14 +519,15 @@
 (function() {
   var ZeroBoard,
     __bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
-    __hasProp = {}.hasOwnProperty,
-    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; };
+    __extends = function(child, parent) { for (var key in parent) { if (__hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    __hasProp = {}.hasOwnProperty;
 
   ZeroBoard = (function(_super) {
     __extends(ZeroBoard, _super);
 
     function ZeroBoard() {
       this.updateSite = __bind(this.updateSite, this);
+      this.loadAvatarsWorker = __bind(this.loadAvatarsWorker, this);
       this.submittedMessage = __bind(this.submittedMessage, this);
       this.onOpenWebsocket = __bind(this.onOpenWebsocket, this);
       return ZeroBoard.__super__.constructor.apply(this, arguments);
@@ -627,24 +628,25 @@
       if (this.avatar_thread) {
         return;
       }
-      return this.avatar_thread = setInterval(((function(_this) {
-        return function() {
-          var hash, i, imagedata, _i, _results;
-          _results = [];
-          for (i = _i = 1; _i <= 5; i = ++_i) {
-            hash = _this.avatars_queue.shift();
-            if (hash) {
-              imagedata = new Identicon(hash, 70).toString();
-              _results.push($("body").append("<style>.identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }</style>"));
-            } else {
-              clearInterval(_this.avatar_thread);
-              _this.avatar_thread = null;
-              break;
-            }
-          }
-          return _results;
-        };
-      })(this)), 20);
+      this.loadAvatarsWorker();
+      return this.avatar_thread = setInterval(this.loadAvatarsWorker, 200);
+    };
+
+    ZeroBoard.prototype.loadAvatarsWorker = function() {
+      var hash, i, imagedata, _i, _results;
+      _results = [];
+      for (i = _i = 1; _i <= 5; i = ++_i) {
+        hash = this.avatars_queue.shift();
+        if (hash) {
+          imagedata = new Identicon(hash, 70).toString();
+          _results.push($("body").append("<style>.identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }</style>"));
+        } else {
+          clearInterval(this.avatar_thread);
+          this.avatar_thread = null;
+          break;
+        }
+      }
+      return _results;
     };
 
     ZeroBoard.prototype.loadMessages = function() {
@@ -703,11 +705,11 @@
       if (secs < 60) {
         return "Just now";
       } else if (secs < 60 * 60) {
-        return "" + (Math.round(secs / 60)) + " minutes ago";
+        return (Math.round(secs / 60)) + " minutes ago";
       } else if (secs < 60 * 60 * 24) {
-        return "" + (Math.round(secs / 60 / 60)) + " hours ago";
+        return (Math.round(secs / 60 / 60)) + " hours ago";
       } else {
-        return "" + (Math.round(secs / 60 / 60 / 24)) + " days ago";
+        return (Math.round(secs / 60 / 60 / 24)) + " days ago";
       }
     };
 
