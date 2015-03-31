@@ -6,12 +6,13 @@ header('Access-Control-Allow-Headers: *');
 
 
 $site = "1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp";
+$site_domain = "board.zeronetwork.bit";
 $private_key = "xxxxxxxx";
 
 $zeronet_dir = "/home/zeronet/p-private/dev1/bin-zeronet";
 $messages_json = "$zeronet_dir/data/$site/messages.json";
 
-if (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], $site) === false) {
+if (isset($_SERVER['HTTP_REFERER']) and strpos($_SERVER['HTTP_REFERER'], $site) === false and strpos(strtolower($_SERVER['HTTP_REFERER']), $site_domain) === false) {
 	header('HTTP/1.0 403 Forbidden');
 	die("Referer error.");
 }
