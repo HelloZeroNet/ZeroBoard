@@ -42,14 +42,18 @@ a:hover { background-color: rgba(0,0,0,0.2) }
 .message-new .body { padding: 0px }
 .message-new input {  }
 
-.message-new .submit { 
+.submit { 
 	padding: 10px 15px; display: inline-block; -webkit-border-radius: 2px; -moz-border-radius: 2px; -o-border-radius: 2px; -ms-border-radius: 2px; border-radius: 2px ; border-bottom: 2px solid #CDBD1E; 
 	-webkit-transition: all 0.5s; -moz-transition: all 0.5s; -o-transition: all 0.5s; -ms-transition: all 0.5s; transition: all 0.5s ; background-color: #FFF85F; font-size: 20px; line-height: 31px; background-position: left center;
 }
-.message-new .submit:hover { background-color: #FFF400; border-bottom: 2px solid #4D4D4C; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
-.message-new .submit:active { position: relative; top: 1px }
+.submit:hover { background-color: #FFF400; border-bottom: 2px solid #4D4D4C; -webkit-transition: none ; -moz-transition: none ; -o-transition: none ; -ms-transition: none ; transition: none  }
+.submit:active { position: relative; top: 1px }
 
-.message-new.submitting .submit { color: rgba(0,0,0,0); background: #999 url(../img/loading.gif) no-repeat center center; border-bottom: 0px #999 solid; cursor: wait; pointer-events: none; -webkit-transition: all 0.5s ; -moz-transition: all 0.5s ; -o-transition: all 0.5s ; -ms-transition: all 0.5s ; transition: all 0.5s  }
+.message-new.submitting .submit, .submit.loading { color: rgba(0,0,0,0); background: #999 url(../img/loading.gif) no-repeat center center; border-bottom: 0px #999 solid; cursor: wait; pointer-events: none; -webkit-transition: all 0.5s ; -moz-transition: all 0.5s ; -o-transition: all 0.5s ; -ms-transition: all 0.5s ; transition: all 0.5s  }
+
+.submit.more { background-color: transparent; border: 1px solid #AFA8A8; display: none }
+.submit.more:hover { background-color: transparent; border: 1px solid #999; background-color: #FFF400; -webkit-transition: none; -moz-transition: none; -o-transition: none; -ms-transition: none; transition: none ; border: 1px #FFF400 solid; }
+.submit.more:active { position: relative; top: 1px }
 
 
 

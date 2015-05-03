@@ -5,7 +5,11 @@ class ZeroBoard extends ZeroFrame
 		@avatars_queue = []
 		@avatars_thread = null
 		
-		$(".submit").on "click", (=> @submitMessage() )
+		$(".message-new .submit").on "click", (=> @submitMessage() )
+		$(".submit.more").on "click", => 
+			@display_all = true
+			@loadMessages(true) 
+		
 		$(".message-new input").on "keydown", (e) =>
 			if e.keyCode == 13 then @submitMessage() 
 
@@ -86,22 +90,30 @@ class ZeroBoard extends ZeroFrame
 
 
 	# Load messages from messages.json
-	loadMessages: ->
+	loadMessages: (cleanup=false) ->
+
 		$.getJSON "messages.json", (messages) =>
+			if cleanup
+				$(".messages .message:not(.template").remove() # Re-add all element
+				$(".submit.more").css("display", "none")
 			empty = $(".messages .message:not(.template").length == 0
 			s = +(new Date)
 			@log "Loading messages, empty:", empty
 			template = $(".message.template")
+			elem_messages = $(".messages")
+			if not @display_all
+				messages = messages[..100]
+				$(".submit.more").css("display", "block")
 			for message in messages.reverse()
 				key = message.sender+"-"+message.added
-				if empty or $(".message-#{key}").length == 0 # Add if not exits
-					elem = template.clone().removeClass("template").addClass("message-#{key}")
+				if empty or not document.getElementById("message-#{key}") # Add if not exits
+					elem = template.clone().removeClass("template").attr("id", "message-#{key}")
 					if not empty # Not first init, init for animating
 						elem.css({"opacity": 0, "margin-bottom": 0})
 					$(".body", elem).html(message.body)
 					$(".avatar", elem).addClass("identicon-#{message.sender}")
 					$(".added", elem).text(@formatSince(message.added))
-					elem.prependTo($(".messages"))
+					elem.prependTo(elem_messages)
 					if not empty # Not first init, animate it
 						@setAvatar($(".avatar", elem), message.sender) # Load avatar
 						height = elem.outerHeight()
@@ -113,6 +125,7 @@ class ZeroBoard extends ZeroFrame
 
 			@loadAvatars()
 			$(".messages").css("opacity", "1")
+		return false
 
 
 

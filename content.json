@@ -4,39 +4,34 @@
   "domain": "Board.ZeroNetwork.bit", 
   "files": {
     "css/all.css": {
-      "sha1": "ec2a3248a1bb58b7438dec7ba9b9120594c34cb3", 
-      "sha512": "60a98acb770fc7523ed67fee787a6f9a22794b7e0cb968a7ebff66295ff783b0", 
-      "size": 70966
+      "sha512": "ec861bc43a14a29cc1ba52a9cd7c2753d087417bd3d27c7da71247b3592865b3", 
+      "size": 71330
     }, 
     "img/loading.gif": {
-      "sha1": "a669dbd8a577f6957656fc88ba4960b93fcd23d9", 
       "sha512": "8a42b98962faea74618113166886be488c09dad10ca47fe97005edc5fb40cc00", 
       "size": 723
     }, 
     "index.html": {
-      "sha1": "d60fa9ee0799aa2c6dee02073cee9e5dffa93e7d", 
-      "sha512": "3e0d035ed30656763932c543d831a7c8efe715230de68c160b767a0cbc312ad1", 
-      "size": 1098
+      "sha512": "1d9ad6c77456b52d5511cc1cef345aac2fcfcde682830e4a6817d318dec7fc38", 
+      "size": 1189
     }, 
     "js/all.js": {
-      "sha1": "6d612b0916ed9d768fdbd52f16e7a56be9b3c2b3", 
-      "sha512": "b5583cf86494f87e70446c904c519a6f51439c999618b01c8b18b96cf13a8a5a", 
-      "size": 106609
+      "sha512": "b9b701f88e3e6c2abdc25c3da1e1dda470698a9e000d7b29a79e5177fdd0b637", 
+      "size": 107301
     }, 
     "messages.json": {
-      "sha1": "e94a3916561a7e1df96e74939d3f95c1938a1967", 
-      "sha512": "78d46c048ba866644add55c634206f95d142c0f763747c994caa50d98b1a2c58", 
-      "size": 155330
+      "sha512": "79572945dc1f85879b8fbeb69ecf670986d663279fbca0af142ac62fb054d771", 
+      "size": 201902
     }
   }, 
   "ignore": "(js|css)/(?!all.(js|css))", 
-  "modified": 1427756788.735158, 
+  "modified": 1430645158.019, 
   "sign": [
-    76782659036482717491456491988332759982432385710052277434383356087620175465421, 
-    112016810639982643988037097424157595163366344226460158539479020450589892728969
+    67617144029262144943494144935007579409215719491332586255097638660909001800183, 
+    100016514563220003676310252876369209960587090746284708226287886569384141061104
   ], 
   "signers_sign": null, 
   "signs_required": 1, 
   "title": "ZeroBoard", 
-  "zeronet_version": "0.2.8"
+  "zeronet_version": "0.2.9"
 }

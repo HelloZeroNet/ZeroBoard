@@ -124,7 +124,6 @@
 }).call(this);
 
 
-
 /* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/identicon.js ---- */
 
 
@@ -297,7 +296,6 @@
   };
 
 }).call(this);
-
 
 
 /* ---- data/1Gfey7wVXXg1rxk751TBTxLJwhddDNfcdp/js/lib/pnglib.js ---- */
@@ -538,11 +536,17 @@
       this.avatars_added = {};
       this.avatars_queue = [];
       this.avatars_thread = null;
-      $(".submit").on("click", ((function(_this) {
+      $(".message-new .submit").on("click", ((function(_this) {
         return function() {
           return _this.submitMessage();
         };
       })(this)));
+      $(".submit.more").on("click", (function(_this) {
+        return function() {
+          _this.display_all = true;
+          return _this.loadMessages(true);
+        };
+      })(this));
       $(".message-new input").on("keydown", (function(_this) {
         return function(e) {
           if (e.keyCode === 13) {
@@ -649,20 +653,32 @@
       return _results;
     };
 
-    ZeroBoard.prototype.loadMessages = function() {
-      return $.getJSON("messages.json", (function(_this) {
+    ZeroBoard.prototype.loadMessages = function(cleanup) {
+      if (cleanup == null) {
+        cleanup = false;
+      }
+      $.getJSON("messages.json", (function(_this) {
         return function(messages) {
-          var elem, empty, height, key, message, s, template, _i, _j, _len, _len1, _ref, _ref1;
+          var elem, elem_messages, empty, height, key, message, s, template, _i, _j, _len, _len1, _ref, _ref1;
+          if (cleanup) {
+            $(".messages .message:not(.template").remove();
+            $(".submit.more").css("display", "none");
+          }
           empty = $(".messages .message:not(.template").length === 0;
           s = +(new Date);
           _this.log("Loading messages, empty:", empty);
           template = $(".message.template");
+          elem_messages = $(".messages");
+          if (!_this.display_all) {
+            messages = messages.slice(0, 101);
+            $(".submit.more").css("display", "block");
+          }
           _ref = messages.reverse();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             message = _ref[_i];
             key = message.sender + "-" + message.added;
-            if (empty || $(".message-" + key).length === 0) {
-              elem = template.clone().removeClass("template").addClass("message-" + key);
+            if (empty || !document.getElementById("message-" + key)) {
+              elem = template.clone().removeClass("template").attr("id", "message-" + key);
               if (!empty) {
                 elem.css({
                   "opacity": 0,
@@ -672,7 +688,7 @@
               $(".body", elem).html(message.body);
               $(".avatar", elem).addClass("identicon-" + message.sender);
               $(".added", elem).text(_this.formatSince(message.added));
-              elem.prependTo($(".messages"));
+              elem.prependTo(elem_messages);
               if (!empty) {
                 _this.setAvatar($(".avatar", elem), message.sender);
                 height = elem.outerHeight();
@@ -696,6 +712,7 @@
           return $(".messages").css("opacity", "1");
         };
       })(this));
+      return false;
     };
 
     ZeroBoard.prototype.formatSince = function(time) {
