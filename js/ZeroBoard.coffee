@@ -1,23 +1,23 @@
 class ZeroBoard extends ZeroFrame
 	init: ->
-		@loadMessages()
 		@avatars_added = {}
 		@avatars_queue = []
 		@avatars_thread = null
-		
+
 		$(".message-new .submit").on "click", (=> @submitMessage() )
-		$(".submit.more").on "click", => 
+		$(".submit.more").on "click", =>
 			@display_all = true
-			@loadMessages(true) 
-		
+			@loadMessages(true)
+
 		$(".message-new input").on "keydown", (e) =>
-			if e.keyCode == 13 then @submitMessage() 
+			if e.keyCode == 13 then @submitMessage()
 
 		@log "inited!"
 
 
 	# Wrapper websocket connection ready
 	onOpenWebsocket: (e) =>
+		@loadMessages()
 		@cmd "channelJoin", {"channel": "siteChanged"} # Sign up to site changes
 		@cmd "siteInfo", {}, (ret) => # Get site info
 			@site_info = ret
@@ -25,9 +25,11 @@ class ZeroBoard extends ZeroFrame
 
 		@cmd "serverInfo", {}, (ret) => # Get server info
 			@server_info = ret
+			### No longer an issue
 			if not @server_info.ip_external
 				$("#passive_error").css("display", "inline-block") # Display passive port error
 				$("#passive_error a").on "click", @updateSite # Manual update on click
+			###
 
 
 
@@ -92,11 +94,12 @@ class ZeroBoard extends ZeroFrame
 	# Load messages from messages.json
 	loadMessages: (cleanup=false) ->
 
-		$.getJSON "messages.json", (messages) =>
+		@cmd "fileGet", "messages.json", (res) =>
+			messages = JSON.parse(res)
 			if cleanup
-				$(".messages .message:not(.template").remove() # Re-add all element
+				$(".messages .message:not(.template)").remove() # Re-add all element
 				$(".submit.more").css("display", "none")
-			empty = $(".messages .message:not(.template").length == 0
+			empty = $(".messages .message:not(.template)").length == 0
 			s = +(new Date)
 			@log "Loading messages, empty:", empty
 			template = $(".message.template")

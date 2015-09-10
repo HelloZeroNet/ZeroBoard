@@ -532,7 +532,6 @@
     }
 
     ZeroBoard.prototype.init = function() {
-      this.loadMessages();
       this.avatars_added = {};
       this.avatars_queue = [];
       this.avatars_thread = null;
@@ -558,6 +557,7 @@
     };
 
     ZeroBoard.prototype.onOpenWebsocket = function(e) {
+      this.loadMessages();
       this.cmd("channelJoin", {
         "channel": "siteChanged"
       });
@@ -569,11 +569,13 @@
       })(this));
       return this.cmd("serverInfo", {}, (function(_this) {
         return function(ret) {
-          _this.server_info = ret;
-          if (!_this.server_info.ip_external) {
-            $("#passive_error").css("display", "inline-block");
-            return $("#passive_error a").on("click", _this.updateSite);
-          }
+          return _this.server_info = ret;
+
+          /* No longer an issue
+          			if not @server_info.ip_external
+          				$("#passive_error").css("display", "inline-block") # Display passive port error
+          				$("#passive_error a").on "click", @updateSite # Manual update on click
+           */
         };
       })(this));
     };
@@ -657,14 +659,15 @@
       if (cleanup == null) {
         cleanup = false;
       }
-      $.getJSON("messages.json", (function(_this) {
-        return function(messages) {
-          var elem, elem_messages, empty, height, key, message, s, template, _i, _j, _len, _len1, _ref, _ref1;
+      this.cmd("fileGet", "messages.json", (function(_this) {
+        return function(res) {
+          var elem, elem_messages, empty, height, key, message, messages, s, template, _i, _j, _len, _len1, _ref, _ref1;
+          messages = JSON.parse(res);
           if (cleanup) {
-            $(".messages .message:not(.template").remove();
+            $(".messages .message:not(.template)").remove();
             $(".submit.more").css("display", "none");
           }
-          empty = $(".messages .message:not(.template").length === 0;
+          empty = $(".messages .message:not(.template)").length === 0;
           s = +(new Date);
           _this.log("Loading messages, empty:", empty);
           template = $(".message.template");
