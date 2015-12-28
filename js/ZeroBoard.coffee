@@ -3,10 +3,11 @@ class ZeroBoard extends ZeroFrame
 		@avatars_added = {}
 		@avatars_queue = []
 		@avatars_thread = null
+		@limit = 100
 
 		$(".message-new .submit").on "click", (=> @submitMessage() )
 		$(".submit.more").on "click", =>
-			@display_all = true
+			@limit += 500
 			@loadMessages(true)
 
 		$(".message-new input").on "keydown", (e) =>
@@ -40,7 +41,7 @@ class ZeroBoard extends ZeroFrame
 			$(".message-new input").attr("disabled", "disabled")
 			hash = "sha512"
 			auth_key = @site_info["auth_key"]
-			$.post("http://demo.zeronet.io/ZeroBoard/add.php", {"body": body, "auth_key": auth_key, "hash": hash}).always(@submittedMessage)
+			$.post("https://demo.zeronet.io/ZeroBoard/add.php", {"body": body, "auth_key": auth_key, "hash": hash}).always(@submittedMessage)
 		else
 			$(".message-new input").val("I'm so lazy that I'm using the default message.").select()
 
@@ -74,19 +75,21 @@ class ZeroBoard extends ZeroFrame
 	loadAvatars: ->
 		if @avatar_thread then return # Already running
 		@loadAvatarsWorker()
-		@avatar_thread = setInterval @loadAvatarsWorker, 200
+		@avatar_thread = setInterval @loadAvatarsWorker, 500
 
 
 	loadAvatarsWorker: =>
+		new_styles = ""
 		for i in [1..5]
 			hash = @avatars_queue.shift()
 			if hash
 				imagedata = new Identicon(hash, 70).toString();
-				$("body").append("<style>.identicon-#{hash} { background-image: url(data:image/png;base64,#{imagedata}) }</style>")
+				new_styles += ".identicon-#{hash} { background-image: url(data:image/png;base64,#{imagedata}) }"
 			else
 				clearInterval @avatar_thread
 				@avatar_thread = null
 				break
+		$("body").append("<style>#{new_styles}</style>")
 
 
 
@@ -104,9 +107,11 @@ class ZeroBoard extends ZeroFrame
 			@log "Loading messages, empty:", empty
 			template = $(".message.template")
 			elem_messages = $(".messages")
-			if not @display_all
-				messages = messages[..100]
+			if @limit < messages.length
+				messages = messages[..@limit]
 				$(".submit.more").css("display", "block")
+			else
+				$(".submit.more").css("display", "none")
 			for message in messages.reverse()
 				key = message.sender+"-"+message.added
 				if empty or not document.getElementById("message-#{key}") # Add if not exits

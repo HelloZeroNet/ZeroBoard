@@ -535,6 +535,7 @@
       this.avatars_added = {};
       this.avatars_queue = [];
       this.avatars_thread = null;
+      this.limit = 100;
       $(".message-new .submit").on("click", ((function(_this) {
         return function() {
           return _this.submitMessage();
@@ -542,7 +543,7 @@
       })(this)));
       $(".submit.more").on("click", (function(_this) {
         return function() {
-          _this.display_all = true;
+          _this.limit += 500;
           return _this.loadMessages(true);
         };
       })(this));
@@ -588,7 +589,7 @@
         $(".message-new input").attr("disabled", "disabled");
         hash = "sha512";
         auth_key = this.site_info["auth_key"];
-        return $.post("http://demo.zeronet.io/ZeroBoard/add.php", {
+        return $.post("https://demo.zeronet.io/ZeroBoard/add.php", {
           "body": body,
           "auth_key": auth_key,
           "hash": hash
@@ -635,24 +636,24 @@
         return;
       }
       this.loadAvatarsWorker();
-      return this.avatar_thread = setInterval(this.loadAvatarsWorker, 200);
+      return this.avatar_thread = setInterval(this.loadAvatarsWorker, 500);
     };
 
     ZeroBoard.prototype.loadAvatarsWorker = function() {
-      var hash, i, imagedata, _i, _results;
-      _results = [];
+      var hash, i, imagedata, new_styles, _i;
+      new_styles = "";
       for (i = _i = 1; _i <= 5; i = ++_i) {
         hash = this.avatars_queue.shift();
         if (hash) {
           imagedata = new Identicon(hash, 70).toString();
-          _results.push($("body").append("<style>.identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }</style>"));
+          new_styles += ".identicon-" + hash + " { background-image: url(data:image/png;base64," + imagedata + ") }";
         } else {
           clearInterval(this.avatar_thread);
           this.avatar_thread = null;
           break;
         }
       }
-      return _results;
+      return $("body").append("<style>" + new_styles + "</style>");
     };
 
     ZeroBoard.prototype.loadMessages = function(cleanup) {
@@ -672,9 +673,11 @@
           _this.log("Loading messages, empty:", empty);
           template = $(".message.template");
           elem_messages = $(".messages");
-          if (!_this.display_all) {
-            messages = messages.slice(0, 101);
+          if (_this.limit < messages.length) {
+            messages = messages.slice(0, +_this.limit + 1 || 9e9);
             $(".submit.more").css("display", "block");
+          } else {
+            $(".submit.more").css("display", "none");
           }
           _ref = messages.reverse();
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
