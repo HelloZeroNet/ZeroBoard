@@ -33,5 +33,9 @@
   "signers_sign": null, 
   "signs_required": 1, 
   "title": "ZeroBoard", 
-  "zeronet_version": "0.2.9"
+  "translate": [
+    "index.html", 
+    "js/all.js"
+  ], 
+  "zeronet_version": "0.5.1"
 }

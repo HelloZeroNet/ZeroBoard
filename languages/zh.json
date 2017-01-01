@@ -1,0 +1,16 @@
+{
+	"Demo for dynamic, decentralized content publishing.": "动态、去中心化内容发布的演示。",
+	"Try it: Add your message!": "试一试：添加你的消息！",
+	"Submit message": "提交消息",
+	"Your FileServer port is not opened! New messages will not appear automatically. ": "你的 FileServer 端口没有打开，新消息将不会自动出现。",
+	"Reload now": "立即重新加载",
+	"Last messages:": "最新消息：",
+	"▿ Display older messages ▿": "▿ 显示更早的消息 ▿",
+	
+	"Message submitted successfuly!<br>It could take some minutes to appear.": "消息提交成功！<br>这可能需要等几分钟才能显示。",
+	"Message submit failed!<br>": "消息提交失败！<br>",
+	
+	" minutes ago": " 分钟前",
+	" hours ago": " 小时前",
+	" days ago": " 天前"
+}
