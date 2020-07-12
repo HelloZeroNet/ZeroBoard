@@ -1,0 +1,16 @@
+{
+	"Demo for dynamic, decentralized content publishing.": "نسخه آزمایشی برای انتشار محتوای غیر‌متمرکز پویا.",
+	"Try it: Add your message!": "این رو امتحان کن: پیام خودت رو اضافه کن!",
+	"Submit message": "ارسال پیام",
+	"Your FileServer port is not opened! New messages will not appear automatically. ": "پورت فایل‌سرور شما باز نیست، پیام های جدید به صورت خودکار ظاهر نمیشوند. ",
+	"Reload now": "اکنون بازخوانی کنید.",
+	"Last messages:": "اخرین پیام ها:",
+	"▿ Display older messages ▿": "نمایش پیام های قدیمی تر ▿",
+	
+	"Message submitted successfuly!<br>It could take some minutes to appear.": "پیام با موفقیت ارسال شد، <br> ظاهر شدن آن ممکن است دقایقی طول بکشد",
+	"Message submit failed!<br>": "ارسال با خطا مواجه شد! <br>",
+	
+	" minutes ago": " دقایقی پیش",
+	" hours ago": " ساعاتی پیش",
+	" days ago": " چند‌روز پیش"
+}
