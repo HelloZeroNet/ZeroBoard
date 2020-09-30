@@ -1,0 +1,16 @@
+{
+	"Demo for dynamic, decentralized content publishing.": "Демо для динамической, децентрализованной публикации контента.",
+	"Try it: Add your message!": "Попробуйте: добавьте свое сообщение!",
+	"Submit message": "Отправить сообщение",
+	"Your FileServer port is not opened! New messages will not appear automatically. ": "Ваш порт FileServer не открыт! Новые сообщения не будут появляться автоматически. ",
+	"Reload now": "Обновить сейчас",
+	"Last messages:": "Последние сообщения:",
+	"▿ Display older messages ▿": "▿ Показать старые сообщения ▿",
+	
+	"Message submitted successfuly!<br>It could take some minutes to appear.": "Сообщение успешно отправлено!<br>Это может занять несколько минут.",
+	"Message submit failed!<br>": "Ошибка отправки сообщения!<br>",
+	
+	" minutes ago": " м. назад",
+	" hours ago": " ч. назад",
+	" days ago": " д. назад"
+}
